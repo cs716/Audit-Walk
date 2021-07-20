@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+// Dotenv Config
+require('dotenv').config();
+
+/**
+ * Dependencies
+ */
+const app = require('../app');
+const http = require('http');
+const mongo = require('../config/mongo');
+
+/**
+ * Set port
+ */
+const port = (process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP Server
+ */
+const server = http.createServer(app);
+
+/**
+ * Connect to the Mongo server and then open HTTP on success
+ */
+mongo.connect()
+    .then(() => {
+        console.log("Mongo connection established. Starting HTTP.");
+        server.listen(port);
+    })
+    .catch((error) => {
+        console.error(error);
+    })
+

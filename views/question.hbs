@@ -1,0 +1,25 @@
+<div class="card m-auto indexCard">
+    <div class="card-header">
+        {{contentTitle}}
+    </div>
+    <div class="card-body text-center">
+        {{contentBody}}
+    </div>
+    <div class="card-footer text-right">
+        {{#if button1}}
+            {{#with button1}}
+                <a href="{{link}}" class="btn btn-{{type}}">{{text}}</a> 
+            {{/with}}
+        {{/if}}
+        {{#if button2}}
+            {{#with button2}}
+                <a href="{{link}}" class="btn btn-{{type}}">{{text}}</a> 
+            {{/with}}
+        {{/if}}
+        {{#if button3}}
+            {{#with button3}}
+                <a href="{{link}}" class="btn btn-{{type}}">{{text}}</a> 
+            {{/with}}
+        {{/if}}
+    </div>
+</div>

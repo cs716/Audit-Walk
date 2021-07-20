@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.83.1">
+    <title>{{#if store}}{{store}} - {{/if}}GC Audit Tracker</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+    <!-- FontAwesome core CSS -->
+    <link href="/static/internal/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">{{#if store}}{{store}} - {{/if}}Audit Tracker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {{#if store}}
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/audit">Audit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/audits">Audit List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/logout">End Session</a>
+                    </li>
+                    {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/">Start Session</a>
+                    </li>
+                    {{/if}}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="pageAlertZone" style="display:none;"></div>
+    {{{body}}}
+</body>
+<footer>
+    <script type="text/javascript" src="/static/jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- page error handler -->
+    <script type="text/javascript">
+        var current_alertid = 0;
+        function createPageAlert(alertType, alertDuration, heading, message) {
+            var pageContainer = $("#pageAlertZone");
+            pageContainer.append(`<div data-alert-id="${current_alertid}" style="display:none;" class="alert alert-${alertType}"><strong>${heading}</strong> ${message}</div>`);
+            
+            const newAlert = pageContainer.find('div[data-alert-id="' + current_alertid + '"]');
+            newAlert.fadeIn("slow", () => {
+                if (alertDuration > -1) {
+                    setTimeout(() => {
+                        newAlert.fadeOut('slow', () => {
+                            newAlert.remove();
+                        });
+                    }, alertDuration);
+                }
+            });
+            pageContainer.show();
+            current_alertid++;
+        }
+
+        // Alerts from Server
+        {{#if error}}
+            {{#with error}}
+                $(document).ready(() => {
+                    createPageAlert("{{type}}", -1, "{{heading}}", "{{message}}");
+                });
+            {{/with}}
+        {{/if}}
+    </script>
+    {{{block "scripts"}}}
+</footer>

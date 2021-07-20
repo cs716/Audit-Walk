@@ -1,0 +1,84 @@
+<div class="container">
+    <h2>Audit ID {{id}}</h2>
+    {{#each sections}}
+    <div data-section="{{@key}}" class="card mt-3">
+        <div class="card-header font-vw3">
+            Section <span class="allcaps">{{@key}}</span> - {{this}}
+            <button class="btn-secondary float-right font-vw3" onclick="expandCard(this)">Expand</button>
+            <span class="sectionScore badge font-vw3 bg-primary float-right">-%</span>
+        </div>
+        <div class="card-body" style="display: none">
+            {{#each ../items}}
+                {{#ifeq @../key section}}
+                <div class="card mt-3 scoreCard">
+                    <div class="card-body">
+                        {{name}}
+                        <hr>
+                        <strong>Departments:</strong> 
+                        {{#each departments}}
+                            <span class="badge badge-sm bg-secondary text-white allcaps">{{this}}</span>
+                        {{/each}}<br />
+                        {{#if comments}}
+                        <strong>Comments: </strong>
+                        <blockquote class="blockquote">
+                            {{#each comments}}
+                            <p class="mb-0">{{this}}</p>
+                            {{/each}}
+                        </blockquote>
+                        {{/if}}
+                    </div>
+                    <div class="scoreContainer {{getScoreBackground scores}} text-white text-center itemScoreLabel allcaps">
+                        {{getScoreLabel scores}}
+                    </div>
+                </div>
+                {{/ifeq}}
+            {{/each}}
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+{{#extend "scripts"}}
+<script type="text/javascript">
+    function expandCard(row) {
+        $(row).attr("onclick", "collapseCard(this)").html("Collapse");
+        $(row).closest(".card").find(".card-body").slideDown("slow");
+    }
+
+    function collapseCard(row) {
+        $(row).attr("onclick", "expandCard(this)").html("Expand");
+        $(row).closest(".card").find(".card-body").slideUp("slow");
+    }
+
+    function calculateScores() {
+        const sections = $("div[data-section]");
+        for (let i=0; i < sections.length; i++) {
+            const section = sections[i];
+            const scores = $(section).find(".itemScoreLabel");
+            var pass = 0;
+            var fail = 0;
+            for (let v=0; v < scores.length; v++) {
+                const scoreField = $(scores[v]);
+                const score = scoreField.html().trim();
+                if (score == 'pass') 
+                    pass++;
+                else if (score == 'fail') 
+                    fail++;
+            }
+
+            const sectionScore = $(section).find(".sectionScore");
+            if (pass == 0 && fail == 0) {
+                sectionScore.html("N/A");
+            } else {
+                const rate = Math.floor((pass / (pass + fail))*100);
+                sectionScore.html(rate + "%");
+            }
+            
+        }
+    }
+
+    $(document).ready(() => {
+        calculateScores();
+    })
+</script>
+{{/extend}}

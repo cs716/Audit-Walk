@@ -1,0 +1,59 @@
+<div class="card m-auto auditsListCard mt-2">
+    <div class="card-header bg-success text-white">
+        Completed
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <th>Store</th>
+                <th>Author</th>
+                <th>Created</th>
+                <th>Completed</th>
+                <th>Options</th>
+            </thead>
+            <tbody>
+                {{#each audits}}
+                {{#ifeq complete true}}
+                <tr>
+                    <td>{{store}}</td>
+                    <td>{{author}}</td>
+                    <td>{{formatDate createdAt "MMMM Do YYYY"}}</td>
+                    <td>{{formatDate updatedAt "MMMM Do YYYY"}}</td>
+                    <td><a href="/audit/complete/{{_id}}" class="btn btn-sm btn-primary">Open</a></td>
+                </tr>
+                {{/ifeq}}
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card m-auto auditsListCard mt-2">
+    <div class="card-header bg-warning">
+        In Progress
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <th>Store</th>
+                <th>Author</th>
+                <th>Created</th>
+                <th>Completed</th>
+                <th>Options</th>
+            </thead>
+            <tbody>
+                {{#each audits}}
+                    {{#unless complete}}
+                    <tr>
+                        <td>{{store}}</td>
+                        <td>{{author}}</td>
+                        <td>{{formatDate createdAt "MMMM Do YYYY"}}</td>
+                        <td>{{formatDate updatedAt "MMMM Do YYYY"}}</td>
+                        <td><a href="/audit/resume/{{_id}}" class="btn btn-sm btn-primary">Open</a></td>
+                    </tr>
+                    {{/unless}}
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>

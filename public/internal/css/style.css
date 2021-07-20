@@ -1,0 +1,97 @@
+.font-18 {
+    font-size: 18px;
+}
+
+.float-right {
+    float: right;
+    margin-right:10px;
+}
+
+.float-left {
+    float: left;
+    margin-left: 10px;
+}
+
+.department, .allcaps {
+    text-transform: uppercase;
+}
+
+tr.pass td {
+    background-color:rgb(153, 255, 139);
+}
+
+tr.fail td {
+    background-color:rgb(255, 130, 130);
+}
+
+tr.na td {
+    background-color:rgb(100, 100, 100);
+    color: #FFF;
+}
+
+#audit-table td:last-child {
+    width: 125px;
+}
+
+.sessionCard {
+    top:50px;
+    max-width:700px;
+    display: flex;
+}
+
+.indexCard {
+    top: 50px;
+    max-width:700px;
+    display: flex;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.stepCell,
+.rateCell {
+    font-size: min(2vw, 16pt);
+}
+
+.btn-comment {
+    margin-top:5px;
+}
+
+.departmentSelector {
+    max-width: 400px;
+    margin: auto;
+    margin-top: 5px;
+}
+
+.font-vw3 {
+    font-size: min(3vw, 16pt);
+}
+
+.itemScoreLabel {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.scoreContainer {
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 25px;
+    position: absolute;
+}
+
+.scoreCard {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.blockquote p {
+    font-size: min(1vw, 12pt);
+}
+
+.auditsListCard {
+    max-width:1000px;
+    margin: auto;
+}

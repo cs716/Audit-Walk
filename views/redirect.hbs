@@ -1,0 +1,18 @@
+<div class="card m-auto indexCard">
+    <div class="card-header">
+        {{contentTitle}}
+    </div>
+    <div class="card-body text-center">
+        {{contentBody}}
+    </div>
+</div>
+
+{{#extend "scripts"}}
+<script type="text/javascript">
+    $(document).ready(() => {
+        setTimeout(() => {
+            window.location="{{redirectUri}}";
+        }, {{redirectDelay}})
+    });
+</script>
+{{/extend}}

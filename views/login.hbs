@@ -1,0 +1,16 @@
+<form action="/session/create" method="POST">
+    <div class="card m-auto sessionCard">
+        <div class="card-header">
+            Enter your information below
+        </div>
+        <div class="card-body">
+            <label for="name">Name</label><br />
+            <input id="name" placeholder="John" type="text" class="form-control" name="name" /><br />
+            <label for="store">Store Number</label>
+            <input id="store" placeholder="6003" type="number" min="6000" max="6999" class="form-control" name="store" />
+        </div>
+        <div class="card-footer">
+            <input type="submit" class="float-right btn btn-primary" value="Create Session"/>
+        </div>
+    </div>
+</form>

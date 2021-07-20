@@ -1,0 +1,35 @@
+<div class="card m-auto indexCard">
+    <div class="card-header">
+        New Comment for {{department}}
+    </div>
+    <div class="card-body text-left">
+        <strong>Task:</strong> {{auditItem}}
+        <hr>
+        <textarea id="comment-box" class="form-control"></textarea>
+    </div>
+    <div class="card-footer text-right">
+        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Back</button>
+        <button type="button" class="btn btn-primary" onclick="submitComment()">Submit Comment</button>
+    </div>
+</div>
+
+{{#extend "scripts"}}
+<script type="text/javascript">
+    function submitComment() {
+        $.post("/audit/ajax/updateStep", {
+            index: "{{itemIndex}}",
+            department: "{{department}}",
+            comments: $("#comment-box").val()
+        }, (data) => {
+            if (data["error"] && data["error"] === true) {
+                createPageAlert("danger", -1, "Error", data["message"]);
+            } else if (data["error"] === false) {
+                window.location = "/audit/{{department}}";
+            }
+        })
+            .fail(() => {
+                createPageAlert("danger", -1, "Error", "An error has occurred processing your request. Please try again.");
+            });
+    }
+</script>
+{{/extend}}

@@ -1,0 +1,22 @@
+const fs = require('fs');
+const mongo = require('../config/mongo');
+const AuditStep = require('../config/models/auditStep');
+require('dotenv').config();
+
+if (process.argv.length >= 3) {
+    const command = process.argv[2];
+
+    const rImport          = fs.readFileSync('./data/import.json');
+    const imports         = JSON.parse(rImport);
+
+    if (command == 'import-steps') {
+        console.log("Connecting to DB");
+        mongo.connect()
+            .then(async () => {
+                await AuditStep.insertMany(imports);
+                console.log("Import completed");
+            })
+    }
+} else {
+    console.error("Command Usage: node auditcmd [command]");
+}
