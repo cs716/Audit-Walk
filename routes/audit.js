@@ -72,13 +72,30 @@ router.get('/', async (req, res) => {
         const auditId = req.cookies.audit;
         try {
             const items = await AuditItem.find({ department: currentDepartment, auditId: auditId }).lean();
-            res.render('audit', {
-                "sections": sections,
-                "processed": items,
-                "currentDepartment": currentDepartment,
-                "nextDepartment": departments[1],
-                "departments": departments
-            });
+            if (items.length >= 1) {
+                return res.render('audit', {
+                    "sections": sections,
+                    "processed": items,
+                    "currentDepartment": currentDepartment,
+                    "nextDepartment": departments[1],
+                    "departments": departments
+                });
+            } else {
+                return res.render('question', {
+                    contentTitle: "Load Failure",
+                    contentBody: "Your current audit no longer exists! ",
+                    button1: {
+                        link: "/",
+                        type: "primary",
+                        text: "Return Home"
+                    },
+                    button2: {
+                        link: "/audit/create",
+                        type: "success",
+                        text: "Create New Audit"
+                    }
+                });
+            }
         } catch (error) {
             res.render('index', { error: true, message: 'Failed to load audit due to ' + error.name + ' error.. ' + error.message });
             console.error(error);
@@ -192,6 +209,76 @@ router.get('/create', async (req, res) => {
         }
     }
 });
+
+router.get('/delete/:auditId', async (req, res) => {
+    if (typeof req.cookies.name === 'undefined')
+        res.render('login');
+    else {
+        const auditId = req.params.auditId;
+        try {
+            const auditRecord = await AuditRecord.findOne({_id: auditId}).lean();
+            if (auditRecord) {
+                if (auditRecord.complete == true) {
+                    return res.render('question', {
+                        contentTitle: "Failed to Delete",
+                        contentBody: "The requested audit could not be deleted as it has already been finalized.",
+                        button1: {
+                            link: "/",
+                            type: "secondary",
+                            text: "Return Home"
+                        }
+                    });
+                } else {
+                    if (req.query.confirm) {
+                        await AuditRecord.findOneAndDelete({_id: auditId});
+                        await AuditItem.deleteMany({auditId: auditId});
+                        return res.render('redirect', { 
+                            contentTitle: "Audit Deleted", 
+                            contentBody: "Audit has been deleted succesfully. You will be redirected back to the list.", 
+                            redirectUri: "/audits", 
+                            redirectDelay: 3000 
+                        });
+                    } else {
+                        return res.render('question', {
+                            contentTitle: "Audit Delete",
+                            contentBody: "Are you sure you want to delete the selected audit? It cannot be reversed.",
+                            button2: {
+                                link: "/audit/delete/" + auditId + "?confirm=true",
+                                type: "danger",
+                                text: "Delete"
+                            },
+                            button1: {
+                                link: "/audits",
+                                type: "secondary",
+                                text: "Back"
+                            }
+                        });
+                    }
+                }
+            } else {
+                return res.render('question', {
+                    contentTitle: "Failed to Load",
+                    contentBody: "The requested audit ID could not be loaded as it could not be found.",
+                    button1: {
+                        link: "/",
+                        type: "secondary",
+                        text: "Return Home"
+                    }
+                });
+            }
+        } catch (error) {
+            return res.render('question', {
+                contentTitle: "Failed to Load",
+                contentBody: "The requested audit ID could not be loaded.",
+                button1: {
+                    link: "/",
+                    type: "secondary",
+                    text: "Return Home"
+                }
+            });
+        }
+    }
+})
 
 router.get('/resume/:auditId', async (req, res) => {
     if (typeof req.cookies.name === 'undefined')
