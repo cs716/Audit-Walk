@@ -109,16 +109,16 @@ router.post('/ajax/updateStep', async (req, res) => {
     else if (typeof req.cookies.audit === 'undefined')
         res.send({ error: true, message: 'You do not have an audit started. Please return to the homepage and update your active audit.' });
     else {
-        const auditId = req.cookies.audit;
-        const auditItem = parseInt(req.body.index);
-        const auditDepartment = req.body.department;
+        const auditId = {$eq: req.cookies.audit};
+        const auditItem = {$eq: parseInt(req.body.index)};
+        const auditDepartment = {$eq: req.body.department};
 
         let updateArray = {};
         if (typeof req.body.score !== 'undefined')
-            updateArray["score"] = parseInt(req.body.score);
+            updateArray["score"] = {$eq: parseInt(req.body.score)};
         
         if (typeof req.body.comments !== 'undefined') 
-            updateArray["comments"] = req.body.comments;
+            updateArray["comments"] = {$eq: req.body.comments};
 
         if (typeof auditDepartment !== 'undefined' || typeof auditItem !== 'undefined') {
             try {
