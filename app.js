@@ -1,16 +1,17 @@
 const express =         require('express');
 const hbs =             require('express-handlebars');
 const path =            require('path');
+const csurf =           require('tiny-csrf');
 const cookieParser =    require('cookie-parser');
-var tempBlocks =      require('./helpers/template-blocks');
+var tempBlocks =        require('./helpers/template-blocks');
 
 // Routes
-const auditRouter = require('./routes/audit');
-const auditsRouter = require('./routes/audits');
-const indexRouter = require('./routes/index');
+const auditRouter =     require('./routes/audit');
+const auditsRouter =    require('./routes/audits');
+const indexRouter =     require('./routes/index');
 
 // Middleware
-const sessionMw = require('./middleware/session');
+const sessionMw =       require('./middleware/session');
 
 const app = express();
 
@@ -41,6 +42,9 @@ app.use('/static', express.static('public'));
 app.set('trust proxy', 1);
 app.use(cookieParser());
 app.use(sessionMw);
+
+// CSRF
+app.use(csurf("J2j52Abu7VovMpD87SFDDrea6QFgpS8i"));
 
 // Routers
 app.use('/',            indexRouter);
