@@ -52,6 +52,16 @@ function processDepts() {
     return depts;
 }
 
+router.get('/devcreate', async (req, res) => {
+    const step = new AuditStep({
+        section: "a",
+        name: "Test Step",
+        rating: "",
+        departments: ["exterior", "front-end"]
+    });
+    await step.save();
+})
+
 router.get('/', async (req, res) => {
     if (auditLoaded == false) 
         return res.render('question', {
