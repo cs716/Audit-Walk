@@ -56,7 +56,7 @@ router.get('/devcreate', async (req, res) => {
     const step = new AuditStep({
         section: "a",
         name: "Test Step",
-        rating: "",
+        rating: "-",
         departments: ["exterior", "front-end"]
     });
     await step.save();
